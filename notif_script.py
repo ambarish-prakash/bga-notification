@@ -58,7 +58,6 @@ def check_website():
         )
 
         if ("You are up to date" in element.text):
-            client.run(BOT_TOKEN)
             return
         
         client.run(BOT_TOKEN)
