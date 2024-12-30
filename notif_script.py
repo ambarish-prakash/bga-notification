@@ -5,7 +5,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 import time
 import discord
-
+import pdb
 
 config = configparser.ConfigParser()
 config.read('config.ini')
@@ -35,17 +35,28 @@ def check_website():
     try:
         url = "https://en.boardgamearena.com/account"
         driver.get(url)
+        time.sleep(4)
 
-                # Wait for and fill username
+        # Wait for and fill username
         username_field = WebDriverWait(driver, 10).until(
-            EC.presence_of_element_located((By.ID, "username_input"))
+            EC.presence_of_element_located((By.CSS_SELECTOR, "input[placeholder='Email or username']"))
         )
         username_field.send_keys(USERNAME)
+
+        next_button = WebDriverWait(driver, 10).until(
+            EC.element_to_be_clickable((By.LINK_TEXT, "Next"))
+        )
+        next_button.click()
         
-        password_field = driver.find_element(By.ID, "password_input")
-        password_field.send_keys(PASSWORD)
+        time.sleep(2)
+        all_password_fields = driver.find_elements(By.CSS_SELECTOR, "input[type='password']")
+        clickable_pwd_fields = [field for field in all_password_fields if field.is_displayed()]
+
+        clickable_pwd_fields[0].send_keys(PASSWORD)
         
-        login_button = driver.find_element(By.ID, "submit_login_button")
+        login_button = WebDriverWait(driver, 10).until(
+            EC.element_to_be_clickable((By.LINK_TEXT, "Login"))
+        )
         login_button.click()
 
         # wait here for a second
