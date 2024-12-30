@@ -1,18 +1,15 @@
-import configparser
+import os
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 import time
 import discord
-import pdb
 
-config = configparser.ConfigParser()
-config.read('config.ini')
-CHANNEL_ID = int(config['credentials']['channel_id'])
-BOT_TOKEN = config['credentials']['discordbottoken']
-USERNAME = config['credentials']['username']
-PASSWORD = config['credentials']['password']
+CHANNEL_ID = int(os.getenv('CHANNEL_ID'))
+BOT_TOKEN = os.getenv('BOT_TOKEN')
+USERNAME = os.getenv('BGA_USERNAME')
+PASSWORD = os.getenv('BGA_PASSWORD')
 intents = discord.Intents.default()
 client = discord.Client(intents=intents)
 
@@ -69,7 +66,6 @@ def check_website():
         )
 
         if ("You are up to date" in element.text):
-            client.run(BOT_TOKEN)
             return
         
         client.run(BOT_TOKEN)
